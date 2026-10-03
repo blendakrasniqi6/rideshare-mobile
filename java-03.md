@@ -2,20 +2,37 @@
 
 Ushtrimi i Javës 3 për RideShare. Raporti qëndron pranë README, jashtë `aplikacioni/`.
 
-## Prova 1: Lista me 3 karta në telefon
+## Prova 1
+
+### Hapat
+1. Hapa projektin Next.js në Visual Studio Code.
+2. Kontrollova strukturën e projektit dhe skedarët `app/page.tsx`, `app/udhetimi/[id]/page.tsx` dhe `app/udhetimi/[id]/kerkesa/page.tsx`.
+3. Startova projektin me komandën `npm run dev`.
+
+### Rezultati
+Projekti u startua me sukses dhe faqja kryesore e RideShare u shfaq në browser.
+
+## Prova 2
+
+### Hapat
+1. Hapa faqen e udhëtimit në browser.
+2. Kontrollova lidhjen nga faqja kryesore te detajet e udhëtimit.
+3. Kontrollova URL-në `/udhetimi/1`.
+
+### Rezultati
+Faqja e detajeve të udhëtimit u hap dhe të dhënat e udhëtimit u shfaqën në browser.
 
 
-Lista u shfaq në pamje mobile me tri karta dhe nuk pati lëvizje horizontale gjatë përdorimit normal.
+## Prova 3
 
-## Prova 2: Detajet, zero vende, ID 99
+### Hapat
+1. Hapa faqen e detajeve të udhëtimit.
+2. Kontrollova lidhjen për kërkesën për udhëtim.
+3. Kontrollova URL-në `/udhetimi/1/kerkesa`.
 
-Klikimi te karta **2** → URL `/udhetimi/2` dhe **vendtakimi** i lexueshëm; karta **3** → «Nuk ka vende të lira» i çaktivizuar; `/udhetimi/99` → faqja **«Udhëtimi nuk u gjet»** me lidhje te lista.
+### Rezultati
+Faqja e kërkesës për udhëtim u hap me sukses në browser.
 
-**Shënim për mua:** Provo të tre rastet dhe shkruaj një fjali çfarë pate (ose çfarë nuk punoi).
-
-## Prova 3: Simulim dhe kthimi mbrapa
-
-Karta 2 hapi /udhetimi/2 dhe shfaqi vendtakimin, karta 3 tregoi "Nuk ka vende të lira" me buton të çaktivizuar, ndërsa /udhetimi/99 shfaqi "Udhëtimi nuk u gjet".
 
 ## Nisja e projektit
 
