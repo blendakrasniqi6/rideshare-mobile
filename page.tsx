@@ -2,49 +2,36 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejUdhetimin } from "@/lib/udhetimet";
 
-export default async function FaqjaKerkeses({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const udhetim = gjejUdhetimin(id);
-  if (!udhetim) {
-    notFound();
-  }
+export const dynamic = "force-dynamic";
 
-  if (udhetim.vendetELira === 0) {
-    notFound();
+export default async function Kerkesa({
+  params,
+}: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  let udhetim;
+  try {
+    udhetim = await gjejUdhetimin(id);
+  } catch {
+    return (
+      <main>
+        <h1>RideShare</h1>
+        <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
+        <Link href="/">← Kthehu te lista</Link>
+      </main>
+    );
   }
+  if (!udhetim) notFound();
 
   return (
-    <main className="page page-kerkesa">
-      <nav className="nav-back">
-        <Link href={`/udhetimi/${id}`}>← Mbrapa te detajet</Link>
-      </nav>
-
-      <h1>Kërkesë për vend</h1>
-      <p className="kerkesa-route">
-        {udhetim.nisja} → {udhetim.destinacioni}
-      </p>
-
-      <p className="simulim-status" role="status">
-        Simulim: Në pritje
-      </p>
-
-      <p className="simulim-info">
-        Ky është vetëm simulim për ushtrimin — nuk ka rezervim real, databazë
-        apo pagesë.
-      </p>
-
-      <div className="karta-actions">
-        <Link className="btn btn-secondary" href={`/udhetimi/${id}`}>
-          Mbrapa
-        </Link>
-        <Link className="btn btn-secondary" href="/">
-          Kthehu te lista
-        </Link>
-      </div>
+    <main>
+      <Link href={`/udhetimi/${id}`}>← Kthehu te detajet</Link>
+      {udhetim.vende > 0 ? (
+        <>
+          <h1>Simulim: Në pritje</h1>
+          <p>Kërkesa për {udhetim.nisja} nuk është dërguar te shoferi.</p>
+          <p>Ruajtjen dhe konfirmimin real do t’i shtojmë më vonë.</p>
+        </>
+      ) : <h1>Nuk ka vende të lira.</h1>}
     </main>
   );
 }
