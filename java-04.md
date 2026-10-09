@@ -4,36 +4,43 @@ Ruaje këtë skedar si java-04.md pranë README, jashtë aplikacioni/.
 Plotëso të gjitha përgjigjet; hiqi shenjat [PLOTËSO].
 Mos vendos DATABASE_URL, pamje të kredencialeve ose të dhëna reale.
 
-
 ## Çfarë ndërtova
+ Shpjego si lista dhe detajet i lexojnë udhëtimet nga Neon.
+Lista dhe faqet e detajeve tani i lexojnë udhëtimet nga databaza PostgreSQL në Neon. Krijova lidhjen private me Neon në src/lib/db.ts dhe funksionet lexoUdhetimet dhe gjejUdhetimin në src/lib/udhetimet.ts. Faqja kryesore dhe faqet e detajeve përdorin këto funksione për t'i marrë të dhënat nga databaza.
 
-Lista dhe faqet e detajeve tani i lexojnë udhëtimet nga databaza PostgreSQL në Neon. Krijova lidhjen private me Neon në `lib/db.ts` dhe funksionet `lexoUdhetimet` dhe `gjejUdhetimin` në `lib/udhetimet.ts`. Faqja kryesore dhe faqet e detajeve përdorin këto funksione për t'i marrë të dhënat nga databaza.
-
+Lista dhe faqet e detajeve tani i lexojnë udhëtimet nga databaza PostgreSQL në Neon. Krijova lidhjen private me Neon në `lib/db.ts` dhe funksionet `lexoUdhetimet` dhe `gjejUdhetimin` në `lib/udhetimet.ts`. Faqja kryesore dhe faqet e detajeve përdorin këto funksione për t'i marrë të dhënat nga databaza, në vend që t'i lexojnë vetëm nga të dhëna statike.
 ## Provat që bëra
 
 ### Prova 1: Ndryshimi në databazë shfaqet në aplikacion
+ Ndryshova orën e ID 2 nga 08:15 në 08:25 në SQL Editor.
+Shkruaj çfarë tregoi lista dhe çfarë treguan detajet pas rifreskimit.
+Ktheje orën në 08:15 dhe provo përsëri.
 
-Ndryshova orën e udhëtimit me ID 2 nga 08:15 në 08:25 në Neon SQL Editor. Pas rifreskimit, kontrollova nëse ora e re shfaqej në listën e udhëtimeve dhe në faqen e detajeve. Pastaj e riktheva orën në 08:15 dhe rifreskova të dyja faqet për të verifikuar gjendjen fillestare.
+Në Neon SQL Editor ndryshova orën e udhëtimit me ID 2 nga 08:15 në 08:25. Pas rifreskimit kontrollova nëse lista dhe faqja e detajeve shfaqnin orën e re nga databaza. Në fund, e ktheva orën në 08:15 për ta ruajtur gjendjen fillestare.
 
 ### Prova 2: Lista bosh dhe rikthimi
-
-Shtova përkohësisht `WHERE false` vetëm te pyetja SQL e funksionit `lexoUdhetimet`. Kontrollova mesazhin që shfaqej kur lista ishte bosh. Pastaj e hoqa `WHERE false`, e ruajta skedarin dhe rifreskova faqen për të kontrolluar nëse u kthyen tri kartat e udhëtimeve.
+ Shtova WHERE false vetëm te pyetja e lexoUdhetimet.
+Shkruaj mesazhin që u shfaq. Hoqe WHERE false dhe u kthyen tri kartat?
+Në funksionin `lexoUdhetimet` shtova përkohësisht kushtin `WHERE false` për të simuluar një listë pa udhëtime. Kontrollova nëse aplikacioni shfaqte gjendjen për listë bosh. Pastaj e hoqa kushtin, e rifreskova aplikacionin dhe kontrollova nëse kartat e udhëtimeve u shfaqën përsëri.
 
 ### Prova 3: Lidhja mungon, rikthimi dhe siguria
-
-Ndryshova përkohësisht emrin e variablës `DATABASE_URL` në `.env.local`, ndalova dhe rinisa serverin dhe kontrollova mesazhin e gabimit. Pastaj e riktheva emrin `DATABASE_URL`, rinisa serverin dhe kontrollova nëse aplikacioni u lidh përsëri me databazën. Kontrollova gjithashtu që `.env.local` të mos përfshihej në skedarët për commit në GitHub Desktop.
+ Ndryshova përkohësisht emrin DATABASE_URL në .env.local,
+rinisa serverin dhe shënova mesazhin. Riktheva emrin dhe rinisa serverin.
+Shkruaj a punoi sërish; a mungon .env.local në listën e GitHub Desktop?
+Në skedarin `.env.local` ndryshova përkohësisht emrin e variablës `DATABASE_URL` për të kontrolluar sjelljen e aplikacionit kur mungon konfigurimi i lidhjes. Pas rinisjes së serverit kontrollova rezultatin dhe më pas e riktheva emrin e saktë të variablës. E rinisa serverin përsëri dhe kontrollova nëse aplikacioni lidhej me databazën. Gjithashtu kontrollova që `.env.local` të mos përfshihej në ndryshimet që do të dërgoheshin në GitHub.
 
 ## Ku gjendet puna
-
-Skedari `schema.sql` gjendet në folderin `aplikacioni/`. Skedarët kryesorë të ndryshuar janë `lib/db.ts`, `lib/udhetimet.ts`, faqja kryesore `app/page.tsx`, faqja e detajeve `app/udhetimi/[id]/page.tsx`, faqja e kërkesës `app/udhetimi/[id]/kerkesa/page.tsx` dhe komponenti `components/KartaUdhetimi.tsx`. U përditësuan gjithashtu `package.json`, `package-lock.json` dhe `.gitignore`.
-
-Repository: [(https://github.com/blendakrasniqi6/rideshare-mobile)]
+ Shëno schema.sql, skedarët që ndryshove dhe linkun e repository-t.
+Nëse punon në Vercel, shto linkun e aplikacionit (opsional këtë javë).
+Skema e databazës gjendet te `aplikacioni/schema.sql`. Lidhja me Neon dhe funksionet për leximin e udhëtimeve gjenden te `aplikacioni/lib/db.ts` dhe `aplikacioni/lib/udhetimet.ts`. Faqja kryesore gjendet te `aplikacioni/app/page.tsx`, ndërsa faqet e detajeve dhe kërkesës gjenden te `aplikacioni/app/udhetimi/[id]/page.tsx` dhe `aplikacioni/app/udhetimi/[id]/kerkesa/page.tsx`.
+Repository: https://github.com/blendakrasniqi6/rideshare-mobile
 
 ## Çfarë mbetet për përmirësim
-
-Kërkesa për udhëtim me statusin “Në pritje” mbetet simulim. Aplikacioni nuk ka ende rezervim real, autentikim të përdoruesve ose sistem për menaxhimin e rezervimeve. Hapi i ardhshëm është shtimi i funksionalitetit të rezervimit dhe ruajtja e kërkesave në databazë.
+ Një kufizim ose gabim dhe hapi yt i ardhshëm.
+Kërkesa “Në pritje” mbetet simulim; nuk ka rezervim real.
+Kërkesa për udhëtim me statusin “Në pritje” mbetet simulim dhe nuk krijon ende një rezervim real në databazë. Hapi i ardhshëm është krijimi i funksionalitetit për ruajtjen e kërkesave dhe menaxhimin e vendeve të lira në mënyrë të sigurt.
 
 ## Ndihma nga AI (Artificial Intelligence – inteligjencë artificiale)
+ Çfarë ndihme more dhe çfarë verifikove vetë, ose: Nuk përdora AI.
 
-Përdora AI për ndihmë në konfigurimin e lidhjes me Neon.
-Verifikova vetë konfigurimin, ekzekutimin e aplikacionit dhe rezultatet e provave në databazë.
+ Përdora inteligjencën artificiale për të kuptuar integrimin e Next.js me Neon, kurse verifikova vete konfigurimin e lidhjes, kodin dhe sjelljen e aplikacionit gjatë testimit.
