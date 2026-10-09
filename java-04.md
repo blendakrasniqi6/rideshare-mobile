@@ -12,22 +12,14 @@ Lista dhe faqet e detajeve tani i lexojnë udhëtimet nga databaza PostgreSQL n�
 ## Provat që bëra
 
 ### Prova 1: Ndryshimi në databazë shfaqet në aplikacion
- Ndryshova orën e ID 2 nga 08:15 në 08:25 në SQL Editor.
-Shkruaj çfarë tregoi lista dhe çfarë treguan detajet pas rifreskimit.
-Ktheje orën në 08:15 dhe provo përsëri.
+E ndryshova orën e udhëtimit me ID 2 nga 08:15 në 08:25 në Neon SQL Editor dhe pas rifreskimit kontrollova që ora e re shfaqej në listë dhe në detaje, pastaj e ktheva në 08:15.
 
-Në Neon SQL Editor ndryshova orën e udhëtimit me ID 2 nga 08:15 në 08:25. Pas rifreskimit kontrollova nëse lista dhe faqja e detajeve shfaqnin orën e re nga databaza. Në fund, e ktheva orën në 08:15 për ta ruajtur gjendjen fillestare.
 
 ### Prova 2: Lista bosh dhe rikthimi
- Shtova WHERE false vetëm te pyetja e lexoUdhetimet.
-Shkruaj mesazhin që u shfaq. Hoqe WHERE false dhe u kthyen tri kartat?
-Në funksionin `lexoUdhetimet` shtova përkohësisht kushtin `WHERE false` për të simuluar një listë pa udhëtime. Kontrollova nëse aplikacioni shfaqte gjendjen për listë bosh. Pastaj e hoqa kushtin, e rifreskova aplikacionin dhe kontrollova nëse kartat e udhëtimeve u shfaqën përsëri.
+Shtova përkohësisht WHERE false te funksioni lexoUdhetimet dhe kontrollova listën bosh, pastaj e hoqa kushtin dhe verifikova që udhëtimet shfaqeshin përsëri.
 
 ### Prova 3: Lidhja mungon, rikthimi dhe siguria
- Ndryshova përkohësisht emrin DATABASE_URL në .env.local,
-rinisa serverin dhe shënova mesazhin. Riktheva emrin dhe rinisa serverin.
-Shkruaj a punoi sërish; a mungon .env.local në listën e GitHub Desktop?
-Në skedarin `.env.local` ndryshova përkohësisht emrin e variablës `DATABASE_URL` për të kontrolluar sjelljen e aplikacionit kur mungon konfigurimi i lidhjes. Pas rinisjes së serverit kontrollova rezultatin dhe më pas e riktheva emrin e saktë të variablës. E rinisa serverin përsëri dhe kontrollova nëse aplikacioni lidhej me databazën. Gjithashtu kontrollova që `.env.local` të mos përfshihej në ndryshimet që do të dërgoheshin në GitHub.
+Ndryshova përkohësisht emrin e DATABASE_URL në .env.local, rinisa serverin dhe kontrollova gabimin, pastaj e riktheva emrin e saktë dhe verifikova lidhjen me databazën.
 
 ## Ku gjendet puna
  Shëno schema.sql, skedarët që ndryshove dhe linkun e repository-t.
