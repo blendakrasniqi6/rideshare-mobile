@@ -1,6 +1,5 @@
 # Java 03 – Kartat dhe faqet
 
-Ushtrimi i Javës 3 për RideShare. Raporti qëndron pranë README, jashtë `aplikacioni/`.
 
 ## Prova 1
 
