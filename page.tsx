@@ -1,37 +1,39 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { gjejUdhetimin } from "@/lib/udhetimet";
+import { KartaUdhetimi } from "@/components/KartaUdhetimi";
+import { lexoUdhetimet, type Udhetim } from "@/lib/udhetimet";
 
+// Lexo bazën përsëri në çdo kërkesë për këtë faqe.
 export const dynamic = "force-dynamic";
 
-export default async function Kerkesa({
-  params,
-}: { params: Promise<{ id: string }> }) {
-  const { id } = await params;
-  let udhetim;
+export default async function Home() {
+  let udhetimet: Udhetim[];
   try {
-    udhetim = await gjejUdhetimin(id);
+    udhetimet = await lexoUdhetimet();
   } catch {
     return (
       <main>
         <h1>RideShare</h1>
+      <p><Link href="/panel">Hyr / Paneli im</Link></p>
         <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
-        <Link href="/">← Kthehu te lista</Link>
+        <a className="action" href="/">Provo përsëri</a>
       </main>
     );
   }
-  if (!udhetim) notFound();
 
   return (
     <main>
-      <Link href={`/udhetimi/${id}`}>← Kthehu te detajet</Link>
-      {udhetim.vende > 0 ? (
-        <>
-          <h1>Simulim: Në pritje</h1>
-          <p>Kërkesa për {udhetim.nisja} nuk është dërguar te shoferi.</p>
-          <p>Ruajtjen dhe konfirmimin real do t’i shtojmë më vonë.</p>
-        </>
-      ) : <h1>Nuk ka vende të lira.</h1>}
+      <h1>RideShare · Udhëtimet për AAB</h1>
+      <p><Link href="/panel">Hyr / Paneli im</Link></p>
+      <p>Burimi: Neon · të dhëna fiktive për ushtrime</p>
+      {udhetimet.length === 0 ? (
+        <p>Nuk ka udhëtime për momentin.</p>
+      ) : (
+        <div className="trip-list">
+          {udhetimet.map((udhetim) => (
+            <KartaUdhetimi key={udhetim.id} udhetim={udhetim} />
+          ))}
+        </div>
+      )}
     </main>
   );
 }
