@@ -1,89 +1,25 @@
-<<<<<<< Updated upstream
-# Java 03 – Kartat dhe faqet
+# RideShare — Java 3
 
+Ruaje këtë skedar si `java-03.md` pranë README në repository-n tënd, jashtë dosjes `aplikacioni/`. Mos shto `.txt` pas emrit. Zëvendëso të gjitha shenjat e plotësimit me atë që ndodhi vërtet. Mjafton një fjali e qartë për çdo provë, por trego çfarë prite dhe çfarë pe.
 
-## Prova 1
+## Çfarë ndërtova
+ Shkruaj cilat ekrane të RideShare përfundove sot.
+Përfundova faqen kryesore të RideShare me listën e udhëtimeve dhe kartat që shfaqin nisjen, destinacionin, orën dhe vendet e lira.
 
-### Hapat
-1. Hapa projektin Next.js në Visual Studio Code.
-2. Kontrollova strukturën e projektit dhe skedarët `app/page.tsx`, `app/udhetimi/[id]/page.tsx` dhe `app/udhetimi/[id]/kerkesa/page.tsx`.
-3. Startova projektin me komandën `npm run dev`.
+## Provat që bëra
+### Prova 1: Lista në telefon
+ Hapa faqen kryesore në pamjen e telefonit; prisja tri karta pa lëvizje anash; pashë  listën e udhëtimeve me kartat e paraqitura në faqe.
 
-### Rezultati
-Projekti u startua me sukses dhe faqja kryesore e RideShare u shfaq në browser.
+### Prova 2: Detajet e udhëtimit të dytë
+ Klikova kartën 2; prisja adresën /udhetimi/2 dhe vendtakimin e saj; pashë  mesazhin e pritjes detajet e sakta të udhëtimit.
+Shënova edhe çfarë ndodhi te karta 3 (zero vende) dhe te /udhetimi/99: u shfaq mesazhi që udhëtimi nuk u gjet.
 
-## Prova 2
+### Prova 3: Kërkesa në pritje
+ Klikova Kërko vend; prisja “Simulim: Në pritje”, pa rezervim real; pashë meesazhin e pritjes Pastaj u ktheva te detajet dhe lista: dhe funksionuan si duhet.
 
-### Hapat
-1. Hapa faqen e udhëtimit në browser.
-2. Kontrollova lidhjen nga faqja kryesore te detajet e udhëtimit.
-3. Kontrollova URL-në `/udhetimi/1`.
-
-### Rezultati
-Faqja e detajeve të udhëtimit u hap dhe të dhënat e udhëtimit u shfaqën në browser.
-
-
-## Prova 3
-
-### Hapat
-1. Hapa faqen e detajeve të udhëtimit.
-2. Kontrollova lidhjen për kërkesën për udhëtim.
-3. Kontrollova URL-në `/udhetimi/1/kerkesa`.
-
-### Rezultati
-Faqja e kërkesës për udhëtim u hap me sukses në browser.
-
-
-## Nisja e projektit
-
-```bash
-cd aplikacioni
-npm run dev
-```
-
-Hap `http://localhost:3000`.
-=======
-# Java 03 – Kartat dhe faqet
-
-
-## Prova 1
-
-### Hapat
-1. Hapa projektin Next.js në Visual Studio Code.
-2. Kontrollova strukturën e projektit dhe skedarët `app/page.tsx`, `app/udhetimi/[id]/page.tsx` dhe `app/udhetimi/[id]/kerkesa/page.tsx`.
-3. Startova projektin me komandën `npm run dev`.
-
-### Rezultati
-Projekti u startua me sukses dhe faqja kryesore e RideShare u shfaq në browser.
-
-## Prova 2
-
-### Hapat
-1. Hapa faqen e udhëtimit në browser.
-2. Kontrollova lidhjen nga faqja kryesore te detajet e udhëtimit.
-3. Kontrollova URL-në `/udhetimi/1`.
-
-### Rezultati
-Faqja e detajeve të udhëtimit u hap dhe të dhënat e udhëtimit u shfaqën në browser.
-
-
-## Prova 3
-
-### Hapat
-1. Hapa faqen e detajeve të udhëtimit.
-2. Kontrollova lidhjen për kërkesën për udhëtim.
-3. Kontrollova URL-në `/udhetimi/1/kerkesa`.
-
-### Rezultati
-Faqja e kërkesës për udhëtim u hap me sukses në browser.
-
-
-## Nisja e projektit
-
-```bash
-cd aplikacioni
-npm run dev
-```
-
-Hap `http://localhost:3000`.
->>>>>>> Stashed changes
+## Çfarë do të përmirësoj
+ Shkruaj një gjë që mbeti pa punuar ose një përmirësim për javën tjetër.
+Do të punoj në funksione shtesë për përdoruesit.
+## Ndihma nga AI (Artificial Intelligence – inteligjencë artificiale)
+ Shkruaj çfarë të ndihmoi AI dhe çfarë provove vetë, ose “Nuk përdora AI”.
+Nuk përdora AI
