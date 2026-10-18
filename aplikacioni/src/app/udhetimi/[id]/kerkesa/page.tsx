@@ -6,7 +6,7 @@ export default async function Kerkesa({
   params,
 }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const udhetim = gjejUdhetimin(id);
+const udhetim = await gjejUdhetimin(id);
   if (!udhetim) notFound();
 
   return (
