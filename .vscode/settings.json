@@ -1,5 +1,0 @@
-{
-  "typescript.tsdk": "aplikacioni/node_modules/typescript/lib",
-  "typescript.enablePromptUseWorkspaceTsdk": true,
-  "files.encoding": "utf8"
-}
