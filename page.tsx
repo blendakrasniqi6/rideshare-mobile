@@ -1,50 +1,39 @@
 import Link from "next/link";
-import { notFound } from "next/navigation";
-import { gjejUdhetimin } from "@/lib/udhetimet";
+import { KartaUdhetimi } from "@/components/KartaUdhetimi";
+import { lexoUdhetimet, type Udhetim } from "@/lib/udhetimet";
 
-export default async function FaqjaKerkeses({
-  params,
-}: {
-  params: Promise<{ id: string }>;
-}) {
-  const { id } = await params;
-  const udhetim = gjejUdhetimin(id);
-  if (!udhetim) {
-    notFound();
-  }
+// Lexo bazën përsëri në çdo kërkesë për këtë faqe.
+export const dynamic = "force-dynamic";
 
-  if (udhetim.vendetELira === 0) {
-    notFound();
+export default async function Home() {
+  let udhetimet: Udhetim[];
+  try {
+    udhetimet = await lexoUdhetimet();
+  } catch {
+    return (
+      <main>
+        <h1>RideShare</h1>
+      <p><Link href="/panel">Hyr / Paneli im</Link></p>
+        <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
+        <a className="action" href="/">Provo përsëri</a>
+      </main>
+    );
   }
 
   return (
-    <main className="page page-kerkesa">
-      <nav className="nav-back">
-        <Link href={`/udhetimi/${id}`}>← Mbrapa te detajet</Link>
-      </nav>
-
-      <h1>Kërkesë për vend</h1>
-      <p className="kerkesa-route">
-        {udhetim.nisja} → {udhetim.destinacioni}
-      </p>
-
-      <p className="simulim-status" role="status">
-        Simulim: Në pritje
-      </p>
-
-      <p className="simulim-info">
-        Ky është vetëm simulim për ushtrimin — nuk ka rezervim real, databazë
-        apo pagesë.
-      </p>
-
-      <div className="karta-actions">
-        <Link className="btn btn-secondary" href={`/udhetimi/${id}`}>
-          Mbrapa
-        </Link>
-        <Link className="btn btn-secondary" href="/">
-          Kthehu te lista
-        </Link>
-      </div>
+    <main>
+      <h1>RideShare · Udhëtimet për AAB</h1>
+      <p><Link href="/panel">Hyr / Paneli im</Link></p>
+      <p>Burimi: Neon · të dhëna fiktive për ushtrime</p>
+      {udhetimet.length === 0 ? (
+        <p>Nuk ka udhëtime për momentin.</p>
+      ) : (
+        <div className="trip-list">
+          {udhetimet.map((udhetim) => (
+            <KartaUdhetimi key={udhetim.id} udhetim={udhetim} />
+          ))}
+        </div>
+      )}
     </main>
   );
 }
