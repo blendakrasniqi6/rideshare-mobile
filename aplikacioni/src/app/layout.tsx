@@ -1,4 +1,5 @@
 import "./globals.css";
+import Pwa from "@/components/Pwa";
 
 export const metadata = {
   title: "RideShare",
@@ -12,7 +13,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="sq">
-      <body>{children}</body>
+      <body>
+        <Pwa />
+        {children}
+      </body>
     </html>
   );
 }
