@@ -24,7 +24,7 @@ export default async function Kerkesa({
 
   return (
     <main>
-      <Link href={`/udhetimi/${id}`}>← Kthehu te detajet</Link>
+     <Link href="/">← Kthehu te lista e udhëtimeve</Link>
       {udhetim.vende > 0 ? (
         <>
           <h1>Simulim: Në pritje</h1>
