@@ -1,39 +1,77 @@
 # Java 7 – Provo, korrigjo dhe shpjego RideShare-in tënd
 
-## Skenari i zgjedhur
+## Rasti im 
 
-**Skenari 4 – Kopja offline**
+**Skenari i zgjedhur:** Skenari 4 – Kopja offline.
 
-## Parashikimi
+### Parashikimi
 
-Parashikoj që, pasi lista e udhëtimeve të jetë hapur kur ka internet, ajo do të mund të shfaqet edhe pasi të shkëputet interneti, falë kopjes së ruajtur nga aplikacioni.
+Parashikoj që, pasi lista e udhëtimeve të hapet kur ka internet, ajo do të mund të shfaqet edhe pasi të shkëputet interneti, falë kopjes së ruajtur nga aplikacioni.
 
-## Prova fillestare
+## Ndryshimi i ri
+
+Gjatë testimit, vura re se lidhja për kthim nga faqja e kërkesës për udhëtim e hapte përsëri të njëjtën faqe. E ndryshova lidhjen që të kthehet te lista kryesore e udhëtimeve.
+
+## Ndihma nga AI
+Nuk perdora AI.
+
+## Dy probleme
+
+**1. Problem me navigimin**
+
+Lidhja “Kthehu te detajet” e hapte përsëri të njëjtën faqe, sepse përdorte adresën `/udhetimi/${id}`. Kjo nuk e kthente përdoruesin te lista e udhëtimeve.
+
+**2. Paqartësi në rastin e gabimit të databazës**
+
+Kodi përmban mesazhin “Nuk u lidhëm me databazën. Provo përsëri.”, por nuk e kam testuar veçmas sjelljen e aplikacionit kur databaza nuk është e disponueshme. Prandaj, nuk mund të them se ky rast është testuar plotësisht.
+
+## Korrigjimi (arsyeja)
+
+E ndryshova lidhjen e kthimit që të çojë te faqja kryesore, sepse përdoruesi duhet të mund të kthehet te lista e udhëtimeve.
+
+**Skedari:** `aplikacioni/src/app/udhetimi/[id]/page.tsx`
+
+Kodi para korrigjimit:
+
+```tsx
+<Link href={`/udhetimi/${id}`}>← Kthehu te detajet</Link>
+```
+
+Kodi pas korrigjimit:
+
+```tsx
+<Link href="/">← Kthehu te lista e udhëtimeve</Link>
+```
+
+Pas ndryshimit, e hapa faqen e kërkesës dhe klikova lidhjen. Ajo më ktheu te lista e udhëtimeve.
+
+## Prova 1 – Lista offline
 
 **Hapat:**
 1. E nisa projektin me `npm run dev`.
-2. E hapa RideShare në shfletues.
-3. E hapa mjetin Developer Tools dhe pjesën Network.
-4. E zgjodha mënyrën Offline.
+2. E hapa RideShare në shfletues kur kishte internet.
+3. E hapa Developer Tools dhe pjesën Network.
+4. E aktivizova mënyrën Offline.
 5. E rifreskova faqen.
 
-**Parashikimi** Lista e udhëtimeve të shfaqet edhe pa internet.
-Rasti im: E hapa RideShare aktivizova Offline te Network dhe e rifresokva faqen.
-Lista e ruajtur u shfaq pa internet dhe lista e udhetimeve u shfaq edhe ne menyren offline.
+**Pritshmëria:** Lista e ruajtur e udhëtimeve të shfaqet edhe pa internet.
 
+**Vëzhgimi:** Lista e ruajtur u shfaq edhe pasi aktivizova mënyrën Offline.
+
+**Përfundimi:** Prova e mbështeti parashikimin se lista publike mund të lexohet edhe pa internet.
 
 ## Prova 2 – Kërkesa për udhëtim
 
 **Hapat:**
 1. E hapa RideShare me internet.
 2. E kontrollova listën dhe detajet e udhëtimit.
-3. Kontrollova tekstin që shfaqet te kërkesa për udhëtim.
+3. E kontrollova tekstin që shfaqet te kërkesa për udhëtim.
 
 **Pritshmëria:** Aplikacioni të mos pretendojë se është kryer rezervim real.
 
 **Vëzhgimi:** Kërkesa paraqitet me tekstin “Simulim: Në pritje”. Nuk paraqitet si rezervim i konfirmuar.
 
-**Përfundimi:** Sjellja e vëzhguar është e qartë dhe e dallon simulimin nga një rezervim real.
+**Përfundimi:** Aplikacioni e dallon simulimin nga një rezervim real.
 
 ## Prova 3 – Udhëtimi që nuk ekziston
 
@@ -46,45 +84,8 @@ Lista e ruajtur u shfaq pa internet dhe lista e udhetimeve u shfaq edhe ne menyr
 
 **Vëzhgimi:** Aplikacioni shfaqi mesazhin “Udhëtimi nuk u gjet”.
 
-**Përfundimi:** Aplikacioni e trajton saktë rastin kur kërkohet një udhëtim që nuk ekziston.
+**Përfundimi:** Aplikacioni e trajtoi rastin e udhëtimit që nuk ekziston në mënyrën e pritur.
 
+## Përfundimi
 
-
-## Problemi 1 – Lidhja e gabuar e navigimit
-
-**Problemi:** Në faqen e kërkesës për udhëtim, lidhja “Kthehu te detajet” e hapte përsëri të njëjtën faqe, sepse përdorte adresën `/udhetimi/${id}`.
-
-**Korrigjimi:** E ndryshova lidhjen që të çojë te faqja kryesore me adresën `/`, ku shfaqet lista e udhëtimeve.
-
-**Kodi para korrigjimit:**
-
-```tsx
-<Link href={`/udhetimi/${id}`}>← Kthehu te detajet</Link>
-```
-
-**Kodi pas korrigjimit:**
-
-```tsx
-<Link href="/">← Kthehu te lista e udhëtimeve</Link>
-```
-
-**Prova:** E hapa faqen e kërkesës dhe klikova lidhjen e kthimit.
-
-**Rezultati i pritur:** Të kthehem te lista e udhëtimeve.
-
-**Rezultati i vëzhguar:** Lidhja funksionoi dhe më ktheu te lista e udhëtimeve.
-
-**Përfundimi:** Problemi i navigimit u korrigjua dhe u testua me sukses.
-
-
-## Paqartësia 2 – Gabimi i lidhjes me databazën
-
-**Paqartësia:** Kodi përmban mesazhin “Nuk u lidhëm me databazën. Provo përsëri.”, por ende nuk e kam testuar sjelljen e aplikacionit kur databaza nuk është e disponueshme.
-
-**Kontrolli:** E shqyrtova kodin te `src/app/page.tsx`, `src/app/udhetimi/[id]/page.tsx` dhe `src/lib/db.ts`.
-
-**Vëzhgimi:** Kodi kontrollon nëse `DATABASE_URL` mungon dhe përmban mesazhe për gabimin e lidhjes. Megjithatë, kjo nuk dëshmon se të gjitha rastet e dështimit janë trajtuar si duhet.
-
-**Hapi i ardhshëm:** Duhet të kryej një test të kontrolluar për gabimin e lidhjes, pa ndryshuar konfigurimin e databazës që përdoret normalisht.
-
-
+Testova listën offline, paraqitjen e kërkesës si simulim dhe rastin kur udhëtimi nuk ekziston. Gjatë testimit identifikova dhe korrigjova një problem me lidhjen e navigimit. Testimi i gabimit të lidhjes me databazën mbetet punë për t'u bërë.
