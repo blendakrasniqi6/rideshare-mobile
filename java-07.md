@@ -1,6 +1,6 @@
 # Java 7 – Provo, korrigjo dhe shpjego RideShare-in tënd
 
-## Rasti im (P7-274, GitHub: blendakrasniqi6);
+## Rasti im (P7-274, GitHub: blendakrasniqi6)
 
 Skenari 4 – Kopja offline.
 
@@ -8,13 +8,13 @@ Skenari 4 – Kopja offline.
 
 Parashikoj që lista e udhëtimeve, pasi të hapet me internet, do të shfaqet edhe kur aktivizohet mënyra Offline, falë kopjes së ruajtur nga aplikacioni.
 
-## Dy probleme (1. dhe 2.);
+## Dy probleme (1. dhe 2.)
 
 **1. Problem me navigimin:** Lidhja e kthimit në faqen e udhëtimit përdorte adresën `/udhetimi/${id}` dhe e hapte përsëri të njëjtën faqe, në vend që të kthehej te lista e udhëtimeve.
 
 **2. Problem me databazën:** Sjellja e aplikacionit kur databaza nuk është e disponueshme nuk është testuar plotësisht. Kodi përmban një mesazh gabimi, por nevojitet testim shtesë.
 
-## Korrigjimi (arsyeja);
+## Korrigjimi (arsyeja)
 
 Korrigjova lidhjen e kthimit në faqen e udhëtimit. Në vend të adresës `/udhetimi/${id}`, vendosa adresën `/`, në mënyrë që përdoruesi të kthehet te lista kryesore e udhëtimeve.
 
@@ -36,7 +36,7 @@ Kodi pas korrigjimit:
 <Link href="/">← Kthehu te lista e udhëtimeve</Link>
 ```
 
-## Prova 1 (Hapat, Pritshmëria, Vëzhgimi);
+## Prova 1 (Hapat, Pritshmëria, Vëzhgimi)
 
 **Hapat:**
 1. E nisa projektin me komandën `npm run dev`.
@@ -52,7 +52,7 @@ Lista e ruajtur e udhëtimeve të shfaqet edhe pa internet.
 
 Lista e ruajtur u shfaq edhe pasi aktivizova Offline.
 
-## Prova 2 (Hapat, Pritshmëria, Vëzhgimi);
+## Prova 2 (Hapat, Pritshmëria, Vëzhgimi)
 
 **Hapat:**
 1. E hapa RideShare me internet.
@@ -67,7 +67,7 @@ Aplikacioni të tregojë qartë se kërkesa është simulim dhe jo rezervim real
 
 U shfaq mesazhi “Simulim: Në pritje” dhe teksti tregonte se kërkesa nuk i ishte dërguar shoferit.
 
-## Prova 3 (Hapat, Pritshmëria, Vëzhgimi);
+## Prova 3 (Hapat, Pritshmëria, Vëzhgimi)
 
 **Hapat:**
 1. E hapa RideShare në shfletues.
