@@ -18,7 +18,7 @@ Parashikoj që lista e udhëtimeve, pasi të hapet me internet, do të shfaqet e
 
 Korrigjova lidhjen e kthimit në faqen e udhëtimit. Në vend të adresës `/udhetimi/${id}`, vendosa adresën `/`, në mënyrë që përdoruesi të kthehet te lista kryesore e udhëtimeve.
 
-Skedari: aplikacioni/src/app/udhetimi/[id]/page.tsx
+Skedari: src/app/udhetimi/[id]/page.tsx
 
 Para: https://github.com/blendakrasniqi6/rideshare-mobile/commit/82f19b7
 
