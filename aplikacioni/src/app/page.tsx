@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { KartaUdhetimi } from "@/components/KartaUdhetimi";
 import { lexoUdhetimet, type Udhetim } from "@/lib/udhetimet";
+import { Java8Kontrollet } from "@/components/Java8Kontrollet";
 
 // Lexo bazën përsëri në çdo kërkesë për këtë faqe.
 export const dynamic = "force-dynamic";
@@ -13,7 +14,8 @@ export default async function Home() {
     return (
       <main>
         <h1>RideShare</h1>
-      <p><Link href="/panel">Hyr / Paneli im</Link></p>
+        <Java8Kontrollet />
+        <p><Link href="/panel">Hyr / Paneli im</Link></p>
         <p role="alert">Nuk u lidhëm me databazën. Provo përsëri.</p>
         <a className="action" href="/">Provo përsëri</a>
       </main>
@@ -24,6 +26,7 @@ export default async function Home() {
     <main>
       <h1>RideShare · Udhëtimet për AAB</h1>
       <p><Link href="/panel">Hyr / Paneli im</Link></p>
+      
       <p>Burimi: Neon · të dhëna fiktive për ushtrime</p>
       {udhetimet.length === 0 ? (
         <p>Nuk ka udhëtime për momentin.</p>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejUdhetimin } from "@/lib/udhetimet";
+import { Java8Kontrollet } from "@/components/Java8Kontrollet";
 
 export const dynamic = "force-dynamic";
 
@@ -8,7 +9,9 @@ export default async function Kerkesa({
   params,
 }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
+
   let udhetim;
+
   try {
     udhetim = await gjejUdhetimin(id);
   } catch {
@@ -20,18 +23,24 @@ export default async function Kerkesa({
       </main>
     );
   }
+
   if (!udhetim) notFound();
 
   return (
     <main>
-     <Link href="/">← Kthehu te lista e udhëtimeve</Link>
+      <Link href="/">← Kthehu te lista e udhëtimeve</Link>
+
       {udhetim.vende > 0 ? (
         <>
           <h1>Simulim: Në pritje</h1>
           <p>Kërkesa për {udhetim.nisja} nuk është dërguar te shoferi.</p>
           <p>Ruajtjen dhe konfirmimin real do t’i shtojmë më vonë.</p>
         </>
-      ) : <h1>Nuk ka vende të lira.</h1>}
+      ) : (
+        <h1>Nuk ka vende të lira.</h1>
+      )}
+
+      {id === "2" && <Java8Kontrollet />}
     </main>
   );
 }
