@@ -69,25 +69,27 @@ Në të ardhmen mund të përmirësohet mënyra e paraqitjes së saktësisë së
  Çfarë ndihme more dhe çfarë verifikove vetë, ose: Nuk përdora AI.
  Nuk perdora AI
 
+
 ## Prova me një hyrje të re
- Zgjidh me kolegun njërën: tekst me vetëm hapësira ose ndryshim vendtakimi pa konfirmim.
-- Hyrja që provova:
-- Parashikimi im para klikimit:
-- Çfarë pashë realisht:
-- Skedari dhe funksioni që e shpjegojnë:
-- Çfarë kuptova ose korrigjova:
 
-Këtë pjesë e shpjegoj në klasë. Kontrolli automatik nuk verifikon vërtetësinë e provës.
-Hyrja që provova: Ndryshimi i vendtakimit pa konfirmim.
+**Hyrja që provova:**
 
-Parashikimi im para klikimit:
-Nëse vendtakimi fillestar është "Biblioteka" dhe unë shkruaj "Hyrja B", vendtakimi i konfirmuar duhet të mbetet "Biblioteka" derisa të klikoj butonin "Konfirmo".
+Ndryshova vendtakimin nga Biblioteka në Parking.
 
-Çfarë pashë realisht:
-Gjatë ndryshimit të tekstit, vendtakimi i konfirmuar mbetet "Biblioteka". Vetëm pasi të klikoj "Konfirmo", vendtakimi i ri "Hyrja B" pranohet si vendtakim i konfirmuar.
+**Parashikimi im para klikimit:**
 
-Skedari dhe funksioni që e shpjegojnë:
-src/components/Java8Kontrollet.tsx – logjika e menaxhimit të vendtakimit dhe funksioni që kryen konfirmimin e tij.
+Prisja që vendtakimi i konfirmuar të mos ndryshonte pa klikuar butonin Konfirmo.
 
-Çfarë kuptova ose korrigjova:
-Kuptova dallimin ndërmjet një vendtakimi që përdoruesi vetëm e ka shkruar dhe një vendtakimi që është konfirmuar. Ndryshimi i tekstit nuk duhet ta ndryshojë automatikisht vendtakimin e konfirmuar. Përdoruesi duhet ta konfirmojë vetë ndryshimin.
+**Çfarë pashë realisht:**
+
+Gjatë ndryshimit të tekstit në fushë, vendtakimi i konfirmuar mbeti Biblioteka. Pasi klikova butonin Konfirmo, vendtakimi ndryshoi në Parking.
+
+**Skedari dhe funksioni që e shpjegojnë:**
+
+`aplikacioni/src/components/Java8Kontrollet.tsx`
+
+Variablat `vendtakimiInput` dhe `vendtakimiKonfirmuar` ruajnë vlerën e shkruar dhe vlerën e konfirmuar. Butoni Konfirmo e përditëson vendtakimin e konfirmuar.
+
+**Çfarë kuptova ose korrigjova:**
+
+Kuptova se ndryshimi i tekstit në fushë nuk duhet ta ndryshojë menjëherë vendtakimin e konfirmuar. Ndryshimi bëhet vetëm pasi përdoruesi klikon Konfirmo.

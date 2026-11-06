@@ -1,40 +1,58 @@
+
 "use client";
 
 import { useState } from "react";
 
+type GjendjaLokacionit =
+  | "idle"
+  | "loading"
+  | "success"
+  | "denied"
+  | "timeout"
+  | "unavailable";
+
 export function Java8Kontrollet() {
   const [vendtakimiInput, setVendtakimiInput] = useState("Biblioteka");
   const [vendtakimiKonfirmuar, setVendtakimiKonfirmuar] = useState("Biblioteka");
+  const [gabimiTakimit, setGabimiTakimit] = useState("");
 
-  const [dukeNgarkuar, setDukeNgarkuar] = useState(false);
-  const [mesazhi, setMesazhi] = useState("");
+  const [gjendja, setGjendja] = useState<GjendjaLokacionit>("idle");
+  const [saktësia, setSaktësia] = useState<number | null>(null);
 
-  function merrLokacionin() {
-    if (!navigator.geolocation) {
-      setMesazhi("Pajisja nuk e mbështet lokacionin.");
+  function konfirmoVendtakimin() {
+    const vendtakimi = vendtakimiInput.trim();
+
+    if (!vendtakimi) {
+      setGabimiTakimit("Shkruaj një vendtakim para konfirmimit.");
       return;
     }
 
-    setDukeNgarkuar(true);
-    setMesazhi("Duke kërkuar lokacionin...");
+    setVendtakimiKonfirmuar(vendtakimi);
+    setGabimiTakimit("");
+  }
+
+  function merrLokacionin() {
+    setSaktësia(null);
+
+    if (!navigator.geolocation) {
+      setGjendja("unavailable");
+      return;
+    }
+
+    setGjendja("loading");
 
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setDukeNgarkuar(false);
-
-        const accuracy = position.coords.accuracy;
-
-        setMesazhi("Lokacioni u gjet. Saktësia: " + accuracy + " metra.");
+        setSaktësia(position.coords.accuracy);
+        setGjendja("success");
       },
       (error) => {
-        setDukeNgarkuar(false);
-
         if (error.code === 1) {
-          setMesazhi("Nuk e ke lejuar lokacionin.");
-        } else if (error.code === 2) {
-          setMesazhi("Lokacioni nuk është i disponueshëm.");
+          setGjendja("denied");
         } else if (error.code === 3) {
-          setMesazhi("Koha e pritjes ka kaluar.");
+          setGjendja("timeout");
+        } else {
+          setGjendja("unavailable");
         }
       },
       { timeout: 10000 }
@@ -46,27 +64,47 @@ export function Java8Kontrollet() {
       <h2>Ndryshimi i vendtakimit</h2>
 
       <input
+        data-testid="meeting-input"
         value={vendtakimiInput}
         onChange={(e) => setVendtakimiInput(e.target.value)}
       />
 
       <button
-        onClick={() => setVendtakimiKonfirmuar(vendtakimiInput)}
+        data-testid="confirm-meeting"
+        onClick={konfirmoVendtakimin}
       >
         Konfirmo
       </button>
 
-      <p>Vendtakimi i konfirmuar: {vendtakimiKonfirmuar}</p>
+      <p data-testid="confirmed-meeting">
+        Vendtakimi i konfirmuar: {vendtakimiKonfirmuar}
+      </p>
+
+      <p data-testid="meeting-error">{gabimiTakimit}</p>
 
       <hr />
 
       <h2>Lokacioni im</h2>
 
-      <button onClick={merrLokacionin} disabled={dukeNgarkuar}>
-        {dukeNgarkuar ? "Duke kërkuar..." : "Merr lokacionin"}
+      <button
+        data-testid="locate-me"
+        onClick={merrLokacionin}
+        disabled={gjendja === "loading"}
+      >
+        {gjendja === "loading" ? "Duke kërkuar..." : "Merr lokacionin"}
       </button>
 
-      <p>{mesazhi}</p>
+      <p data-testid="location-status" data-state={gjendja}>
+        {gjendja === "loading" && "Duke kërkuar lokacionin..."}
+        {gjendja === "success" && "Lokacioni u gjet."}
+        {gjendja === "denied" && "Nuk e ke lejuar lokacionin."}
+        {gjendja === "timeout" && "Koha e pritjes ka kaluar."}
+        {gjendja === "unavailable" && "Lokacioni nuk është i disponueshëm."}
+      </p>
+
+      <p data-testid="location-accuracy">
+        {saktësia !== null ? `Saktësia: ${saktësia} metra.` : ""}
+      </p>
     </section>
   );
 }
