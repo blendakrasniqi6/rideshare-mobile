@@ -4,15 +4,19 @@ import Hyrja from "@/components/Hyrja";
 import { KerkesatShoferit } from "@/components/KerkesatShoferit";
 import { Njoftimet } from "@/components/Njoftimet";
 import { profiliIm } from "@/lib/lejet";
+import { getSql } from "@/lib/db";
 import { ruajOren } from "./actions";
 
 export const dynamic = "force-dynamic";
 
 const mesazhet: Record<string, string> = {
   hyr: "Hyr në llogari para se të ndryshosh udhëtimin.",
-  ndaluar: "Nuk ke leje për këtë udhëtim. Ora nuk ndryshoi.",
-  fushe: "Shkruaj një orë të vlefshme, p.sh. 08:25. ID duhet të jetë 1, 2 ose 3.",
-  ruajtur: "Ora u ruajt me sukses. Kontrollo listën dhe detajet.",
+  ndaluar: "Nuk ke leje për këtë udhëtim. Të dhënat nuk ndryshuan.",
+  fushe_id: "ID e udhëtimit duhet të jetë 1, 2 ose 3.",
+  fushe_nisja: "Shkruaj qytetin ose vendin e nisjes.",
+  fushe_ora: "Zgjidh një orë të vlefshme të nisjes.",
+  fushe_vende: "Numri i vendeve duhet të jetë numër i plotë më i madh se 0.",
+  ruajtur: "Të dhënat e udhëtimit u ruajtën me sukses.",
   databaza: "Nuk u lidhëm me databazën. Kontrollo Neon dhe provo përsëri.",
 };
 
@@ -23,9 +27,27 @@ export default async function Panel({
 }) {
   const { m } = await searchParams;
   let p;
+  let udhetimi: {
+    nisja: string;
+    ora: string;
+    vende: number;
+  } | null = null;
 
   try {
     p = await profiliIm();
+
+    if (p?.roli === "shofer") {
+      const sql = getSql();
+
+      const rows = await sql`
+        SELECT nisja, ora, vende
+        FROM udhetimet
+        WHERE id = '2'
+          AND shofer_id = ${p.id}
+      `;
+
+      udhetimi = (rows[0] as typeof udhetimi) ?? null;
+    }
   } catch {
     return (
       <main className="app-shell">
@@ -64,23 +86,50 @@ export default async function Panel({
       {p?.roli === "shofer" ? (
         <>
           <form action={ruajOren}>
-            <h2>Ndrysho orën e udhëtimit tim</h2>
+            <h2>Ndrysho të dhënat e udhëtimit tim</h2>
 
             <input type="hidden" name="id" value="2" />
 
-            <label htmlFor="ora">Ora e re</label>{" "}
+            <label htmlFor="nisja">Vendi i nisjes</label>{" "}
+            <input
+              id="nisja"
+              name="nisja"
+              type="text"
+              defaultValue={udhetimi?.nisja ?? "Fushë Kosovë"}
+              required
+            />
+
+            <br />
+
+            <label htmlFor="ora">Ora e nisjes</label>{" "}
             <input
               id="ora"
               name="ora"
               type="time"
-              defaultValue="08:15"
+              defaultValue={udhetimi?.ora ?? "08:15"}
               required
-            />{" "}
-            <button type="submit">Ruaj orën</button>
+            />
+
+            <br />
+
+            <label htmlFor="vende">Numri i vendeve</label>{" "}
+            <input
+              id="vende"
+              name="vende"
+              type="number"
+              min="1"
+              step="1"
+              defaultValue={udhetimi?.vende ?? 1}
+              required
+            />
+
+            <br />
+
+            <button type="submit">Ruaj ndryshimet</button>
 
             <p>
-              Formulari i laboratorit provon ID 2. Serveri verifikon
-              pronarin edhe nëse ID ndryshohet.
+              Formulari i laboratorit provon ID 2. Serveri kontrollon
+              të dhënat dhe verifikon pronarin e udhëtimit.
             </p>
           </form>
 
@@ -93,7 +142,7 @@ export default async function Panel({
 
             <p>
               Si udhëtar mund të shohësh udhëtimet; nuk mund të ndryshosh
-              orën e shoferit.
+              të dhënat e shoferit.
             </p>
           </>
         )
