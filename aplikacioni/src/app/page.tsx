@@ -4,14 +4,20 @@ import { lexoUdhetimet, type Udhetim } from "@/lib/udhetimet";
 import { lexoIdPreferuara } from "@/lib/preferuarat";
 import { Java8Kontrollet } from "@/components/Java8Kontrollet";
 
-// Lexo bazën përsëri në çdo kërkesë për këtë faqe.
 export const dynamic = "force-dynamic";
 
 export default async function Home() {
   let udhetimet: Udhetim[];
+  let preferuarat: string[] = [];
 
   try {
-    udhetimet = await lexoUdhetimet();
+    const rezultatet = await Promise.all([
+      lexoUdhetimet(),
+      lexoIdPreferuara().catch(() => [] as string[]),
+    ]);
+
+    udhetimet = rezultatet[0];
+    preferuarat = rezultatet[1];
   } catch {
     return (
       <main>
@@ -28,14 +34,6 @@ export default async function Home() {
         </a>
       </main>
     );
-  }
-
-  let preferuarat: string[] = [];
-
-  try {
-    preferuarat = await lexoIdPreferuara();
-  } catch {
-    preferuarat = [];
   }
 
   return (
