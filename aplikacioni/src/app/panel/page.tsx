@@ -2,6 +2,7 @@
 import Link from "next/link";
 import Hyrja from "@/components/Hyrja";
 import { KerkesatShoferit } from "@/components/KerkesatShoferit";
+import { Njoftimet } from "@/components/Njoftimet";
 import { profiliIm } from "@/lib/lejet";
 import { ruajOren } from "./actions";
 
@@ -87,10 +88,14 @@ export default async function Panel({
         </>
       ) : (
         p && (
-          <p>
-            Si udhëtar mund të shohësh udhëtimet; nuk mund të ndryshosh
-            orën e shoferit.
-          </p>
+          <>
+            <Njoftimet />
+
+            <p>
+              Si udhëtar mund të shohësh udhëtimet; nuk mund të ndryshosh
+              orën e shoferit.
+            </p>
+          </>
         )
       )}
 

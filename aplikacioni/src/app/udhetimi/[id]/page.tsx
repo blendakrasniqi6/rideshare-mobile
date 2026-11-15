@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { gjejUdhetimin } from "@/lib/udhetimet";
 import { Java8Kontrollet } from "@/components/Java8Kontrollet";
 import { KerkesaReale } from "@/components/KerkesaReale";
+import { LexoNjoftimin } from "@/components/LexoNjoftimin";
 
 export const dynamic = "force-dynamic";
 
@@ -30,6 +31,8 @@ export default async function Kerkesa({
 
   return (
     <main>
+      <LexoNjoftimin />
+
       <Link href="/">← Kthehu te lista e udhëtimeve</Link>
 
       {udhetim.vende > 0 ? (

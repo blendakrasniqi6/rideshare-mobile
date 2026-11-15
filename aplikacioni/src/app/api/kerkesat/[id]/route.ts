@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { profiliIm } from "@/lib/lejet";
 import { getSql } from "@/lib/db";
@@ -49,15 +50,40 @@ export async function PATCH(request: Request, context: Context) {
 
     if (veprimi === "refuzo") {
       const rows = await sql`
-        UPDATE kerkesat_udhetimit k
-        SET statusi = 'rejected',
-            updated_at = NOW()
-        FROM udhetimet u
-        WHERE k.id = ${id}
-          AND k.udhetim_id = u.id
-          AND u.shofer_id = ${profili.id}
-          AND k.statusi = 'pending'
-        RETURNING k.id, k.statusi
+        WITH refuzuar AS (
+          UPDATE kerkesat_udhetimit k
+          SET statusi = 'rejected',
+              updated_at = NOW()
+          FROM udhetimet u
+          WHERE k.id = ${id}
+            AND k.udhetim_id = u.id
+            AND u.shofer_id = ${profili.id}
+            AND k.statusi = 'pending'
+          RETURNING
+            k.id,
+            k.udhetim_id,
+            k.udhetar_id,
+            k.statusi
+        ),
+        njoftimi AS (
+          INSERT INTO njoftimet (
+            kerkesa_id,
+            perdoruesi_id,
+            titulli,
+            mesazhi
+          )
+          SELECT
+            id,
+            udhetar_id,
+            'Kërkesa u refuzua',
+            'Shoferi e refuzoi kërkesën për udhëtimin #' || udhetim_id
+          FROM refuzuar
+          ON CONFLICT (kerkesa_id) DO NOTHING
+          RETURNING id
+        )
+        SELECT r.id, r.statusi
+        FROM refuzuar r
+        LEFT JOIN njoftimi n ON TRUE
       `;
 
       if (rows.length === 0) {
@@ -70,10 +96,12 @@ export async function PATCH(request: Request, context: Context) {
       return NextResponse.json({ ok: true, kerkesa: rows[0] });
     }
 
-        // Kyç kërkesën dhe udhëtimin për të parandaluar pranime të njëkohshme.
     const rows = await sql`
       WITH kerkesa_e_bllokuar AS MATERIALIZED (
-        SELECT k.id, k.udhetim_id
+        SELECT
+          k.id,
+          k.udhetim_id,
+          k.udhetar_id
         FROM kerkesat_udhetimit k
         JOIN udhetimet u ON u.id = k.udhetim_id
         WHERE k.id = ${id}
@@ -88,7 +116,11 @@ export async function PATCH(request: Request, context: Context) {
             updated_at = NOW()
         FROM kerkesa_e_bllokuar b
         WHERE k.id = b.id
-        RETURNING k.id, k.udhetim_id
+        RETURNING
+          k.id,
+          k.udhetim_id,
+          k.udhetar_id,
+          k.statusi
       ),
       zbrit_vendin AS (
         UPDATE udhetimet u
@@ -96,6 +128,22 @@ export async function PATCH(request: Request, context: Context) {
         FROM pranuar p
         WHERE u.id = p.udhetim_id
         RETURNING u.id, u.vende
+      ),
+      njoftimi AS (
+        INSERT INTO njoftimet (
+          kerkesa_id,
+          perdoruesi_id,
+          titulli,
+          mesazhi
+        )
+        SELECT
+          id,
+          udhetar_id,
+          'Kërkesa u pranua',
+          'Shoferi e pranoi kërkesën për udhëtimin #' || udhetim_id
+        FROM pranuar
+        ON CONFLICT (kerkesa_id) DO NOTHING
+        RETURNING id
       )
       SELECT
         p.id,
@@ -103,6 +151,7 @@ export async function PATCH(request: Request, context: Context) {
         z.vende
       FROM pranuar p
       JOIN zbrit_vendin z ON z.id = p.udhetim_id
+      LEFT JOIN njoftimi n ON TRUE
     `;
 
     if (rows.length === 0) {
