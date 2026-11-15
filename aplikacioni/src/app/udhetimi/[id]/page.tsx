@@ -1,7 +1,9 @@
+
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { gjejUdhetimin } from "@/lib/udhetimet";
 import { Java8Kontrollet } from "@/components/Java8Kontrollet";
+import { KerkesaReale } from "@/components/KerkesaReale";
 
 export const dynamic = "force-dynamic";
 
@@ -31,11 +33,11 @@ export default async function Kerkesa({
       <Link href="/">← Kthehu te lista e udhëtimeve</Link>
 
       {udhetim.vende > 0 ? (
-        <>
-          <h1>Simulim: Në pritje</h1>
-          <p>Kërkesa për {udhetim.nisja} nuk është dërguar te shoferi.</p>
-          <p>Ruajtjen dhe konfirmimin real do t’i shtojmë më vonë.</p>
-        </>
+        <KerkesaReale
+          udhetimId={String(udhetim.id)}
+          vendeFillestare={Number(udhetim.vende)}
+          nisja={udhetim.nisja}
+        />
       ) : (
         <h1>Nuk ka vende të lira.</h1>
       )}
