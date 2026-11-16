@@ -1,3 +1,4 @@
+
 import { beforeEach, describe, expect, it, vi } from "vitest";
 
 const { profiliImMock, getSqlMock, sqlMock } = vi.hoisted(() => ({
@@ -30,7 +31,9 @@ describe("POST /api/kerkesat", () => {
     });
 
     sqlMock
-      .mockResolvedValueOnce([{ id: "2", vende: 1 }])
+      .mockResolvedValueOnce([
+        { id: "2", vende: 1, shofer_id: "999" },
+      ])
       .mockResolvedValueOnce([{ id: 1, statusi: "pending" }]);
 
     const request = new Request("http://localhost/api/kerkesat", {
@@ -54,7 +57,9 @@ describe("POST /api/kerkesat", () => {
       roli: "udhetar",
     });
 
-    sqlMock.mockResolvedValueOnce([{ id: "2", vende: 0 }]);
+    sqlMock.mockResolvedValueOnce([
+      { id: "2", vende: 0, shofer_id: "999" },
+    ]);
 
     const request = new Request("http://localhost/api/kerkesat", {
       method: "POST",
@@ -88,5 +93,32 @@ describe("POST /api/kerkesat", () => {
     expect(response.status).toBe(403);
     expect(data.error).toContain("Vetëm udhëtarët");
     expect(getSqlMock).not.toHaveBeenCalled();
+  });
+
+  it("refuzon kërkesën për udhëtimin e vet", async () => {
+    profiliImMock.mockResolvedValue({
+      id: "100",
+      emri: "Test",
+      roli: "udhetar",
+    });
+
+    sqlMock.mockResolvedValueOnce([
+      { id: "2", vende: 1, shofer_id: "100" },
+    ]);
+
+    const request = new Request("http://localhost/api/kerkesat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ udhetimId: "2" }),
+    });
+
+    const response = await POST(request);
+    const data = await response.json();
+
+    expect(response.status).toBe(403);
+    expect(data.error).toBe(
+      "Nuk mund të dërgosh kërkesë për udhëtimin tënd."
+    );
+    expect(sqlMock).toHaveBeenCalledTimes(1);
   });
 });

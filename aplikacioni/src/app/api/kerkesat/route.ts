@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { profiliIm } from "@/lib/lejet";
 import { getSql } from "@/lib/db";
@@ -93,7 +94,7 @@ export async function POST(request: Request) {
     const sql = getSql();
 
     const udhetimet = await sql`
-      SELECT id, vende
+      SELECT id, vende, shofer_id
       FROM udhetimet
       WHERE id = ${udhetimId}
     `;
@@ -102,6 +103,13 @@ export async function POST(request: Request) {
       return NextResponse.json(
         { error: "Udhëtimi nuk ekziston." },
         { status: 404 }
+      );
+    }
+
+    if (String(udhetimet[0].shofer_id) === String(profili.id)) {
+      return NextResponse.json(
+        { error: "Nuk mund të dërgosh kërkesë për udhëtimin tënd." },
+        { status: 403 }
       );
     }
 
